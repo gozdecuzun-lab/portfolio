@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integrating Technology with the SAMR Model</title>
+<style>
+  :root{ --teal:#0f7361; --navy:#1f3a5f; --ink:#222; --bg:#f4f7f8; --card:#fff; --line:#dbe4e6; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+  .wrap{max-width:760px;margin:0 auto;padding:24px 18px 60px}
+  header{border-bottom:3px solid var(--teal);padding-bottom:12px;margin-bottom:6px}
+  .kicker{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);font-weight:700}
+  h1{font-family:Georgia,serif;font-size:26px;color:var(--navy);margin-top:4px}
+  .byline{font-size:13px;color:#667;margin-top:6px}
+  .progwrap{height:8px;background:#e3eaec;border-radius:6px;margin:16px 0 4px;overflow:hidden}
+  .prog{height:100%;width:0;background:var(--teal);transition:width .3s}
+  .pmeta{font-size:12px;color:#789;text-align:right;margin-bottom:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 24px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  h2{color:var(--navy);font-size:21px;margin-bottom:12px}
+  h3{color:var(--teal);font-size:15px;text-transform:uppercase;letter-spacing:.6px;margin:14px 0 4px}
+  p{margin-bottom:12px}
+  ul{margin:0 0 12px 20px} li{margin-bottom:6px}
+  .obj{background:#eef5f3;border-left:4px solid var(--teal);padding:14px 16px;border-radius:8px;margin:6px 0 4px}
+  .obj b{color:var(--navy)}
+  .level{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+  .level .tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--teal);padding:2px 9px;border-radius:20px;letter-spacing:.5px}
+  .level.aug .tag{background:#2c6e8f}.level.mod .tag{background:#6a4a9c}.level.red .tag{background:#b5632a}
+  .ex{font-size:14px;color:#556;margin-top:6px}
+  .nav{display:flex;justify-content:space-between;margin-top:20px}
+  button{font:inherit;font-weight:700;border:0;border-radius:9px;padding:11px 20px;cursor:pointer}
+  .next{background:var(--teal);color:#fff}.back{background:#e6edee;color:#334}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  .q{margin:14px 0 18px}
+  .q p.stem{font-weight:700;color:var(--navy)}
+  .opts{list-style:none;margin:8px 0 0}
+  .opts li{margin-bottom:8px}
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:10px 14px;cursor:pointer;font-weight:500}
+  .opt.correct{border-color:var(--teal);background:#eef7f3}
+  .opt.wrong{border-color:#c0392b;background:#fbeeec}
+  .fb{font-size:14px;margin-top:6px;display:none}
+  .fb.show{display:block}
+  .fb.ok{color:var(--teal)} .fb.no{color:#c0392b}
+  .result{text-align:center;padding:10px}
+  .score{font-size:40px;font-weight:800;color:var(--teal)}
+  .hidden{display:none}
+  .foot{font-size:12px;color:#8a99a0;text-align:center;margin-top:22px}
+  .pill{display:inline-block;background:#eef5f3;color:var(--teal);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Self-paced module &bull; ~10 minutes</div>
+    <h1>Integrating Technology with the SAMR Model</h1>
+    <div class="byline">A short course for educators &bull; Designed by Gozde Cetin Uzun, Ph.D.</div>
+  </header>
+  <div class="progwrap"><div class="prog" id="prog"></div></div>
+  <div class="pmeta" id="pmeta">Screen 1 of 5</div>
+
+  <div class="card" id="card"><!-- screens injected here --></div>
+  <div class="foot">Self-paced course &bull; works on any device &bull; no sign-in required</div>
+</div>
+
+<script>
+const screens = [
+  // 0 — welcome + objectives
+  `<span class="pill">Welcome</span>
+   <h2>Use technology to transform learning, not just digitize it</h2>
+   <p>Adding a tool to a lesson is easy. Using it to help students learn something they couldn't before is the real goal. The <b>SAMR model</b> gives you a simple way to judge where a technology choice falls, and how to push it further.</p>
+   <div class="obj">
+     <b>By the end of this module, you will be able to:</b>
+     <ul>
+       <li>Describe the four levels of the SAMR model.</li>
+       <li>Classify a classroom technology use at the right SAMR level.</li>
+       <li>Suggest one change that moves a lesson to a higher level.</li>
+     </ul>
+   </div>
+   <p>It takes about 10 minutes and ends with a short knowledge check.</p>`,
+
+  // 1 — what is SAMR
+  `<span class="pill">Concept</span>
+   <h2>What is SAMR?</h2>
+   <p>SAMR describes four ways technology can be used in a lesson, from simply replacing an old tool to enabling something entirely new. The first two levels <b>enhance</b> existing tasks; the last two <b>transform</b> them.</p>
+   <h3>Enhancement</h3>
+   <ul><li><b>Substitution</b> &mdash; tech replaces a tool, no real change.</li>
+       <li><b>Augmentation</b> &mdash; tech replaces a tool and adds a useful improvement.</li></ul>
+   <h3>Transformation</h3>
+   <ul><li><b>Modification</b> &mdash; tech allows the task itself to be redesigned.</li>
+       <li><b>Redefinition</b> &mdash; tech makes a brand-new task possible.</li></ul>
+   <p>Neither end is "bad." Substitution can be exactly right for a quick task. The point is to <b>choose on purpose</b> and know how to climb when it matters.`,
+
+  // 2 — the four levels with examples
+  `<span class="pill">The four levels</span>
+   <h2>One lesson at every level</h2>
+   <p>Here is the same goal, "students write and share a short reflection," at each level.</p>
+   <div class="level sub"><span class="tag">SUBSTITUTION</span>
+     <p class="ex">Students type the reflection in a document instead of writing it on paper. Nothing else changes.</p></div>
+   <div class="level aug"><span class="tag">AUGMENTATION</span>
+     <p class="ex">They type it in a doc and use built-in spell-check and word count to self-edit before submitting.</p></div>
+   <div class="level mod"><span class="tag">MODIFICATION</span>
+     <p class="ex">They post reflections to a shared class board and comment on two peers, turning a private task into a discussion.</p></div>
+   <div class="level red"><span class="tag">REDEFINITION</span>
+     <p class="ex">They record a short video reflection, get audio feedback from a partner in another country, and revise, a task impossible without the technology.</p></div>`,
+
+  // 3 — knowledge check
+  `<span class="pill">Knowledge check</span>
+   <h2>Which level is it?</h2>
+   <p>Read each classroom example and choose the SAMR level. You will get instant feedback.</p>
+   <div id="quiz"></div>`,
+
+  // 4 — summary (built dynamically to show score)
+  `<span class="pill">Summary</span>
+   <h2>Wrap-up</h2>
+   <div id="scorebox" class="result"></div>
+   <h3>Key takeaways</h3>
+   <ul>
+     <li><b>Enhancement</b> (Substitution, Augmentation) keeps the task; <b>Transformation</b> (Modification, Redefinition) changes it.</li>
+     <li>Higher is not always better, choose the level that fits the learning goal.</li>
+     <li>To climb a level, ask: "What could students do now that they couldn't before?"</li>
+   </ul>
+   <div class="obj"><b>Try it:</b> take one lesson you teach, name its current SAMR level, and write one change that moves it up by one.</div>
+   <p style="margin-top:10px">Thanks for completing the module.</p>`
+];
+
+const quiz = [
+  { stem:"Students take a paper quiz as an online form with the same questions.",
+    opts:["Substitution","Augmentation","Modification","Redefinition"], a:0,
+    fb:"Substitution: the tool changed (paper to form) but the task is identical." },
+  { stem:"Students write a story in a shared document and give each other live comments as they draft.",
+    opts:["Substitution","Augmentation","Modification","Redefinition"], a:2,
+    fb:"Modification: real-time peer collaboration redesigns the writing task itself." },
+  { stem:"Students read a text on a tablet and tap words to hear them read aloud and see definitions.",
+    opts:["Substitution","Augmentation","Modification","Redefinition"], a:1,
+    fb:"Augmentation: same reading task, with a genuine functional improvement." },
+  { stem:"Students design and publish an interactive map that a local community actually uses.",
+    opts:["Substitution","Augmentation","Modification","Redefinition"], a:3,
+    fb:"Redefinition: this task was not possible before the technology." }
+];
+
+let cur = 0, answered = 0, correct = 0;
+
+function renderQuiz(){
+  const host = document.getElementById('quiz');
+  host.innerHTML = quiz.map((q,i)=>`
+    <div class="q" data-i="${i}">
+      <p class="stem">${i+1}. ${q.stem}</p>
+      <ul class="opts">${q.opts.map((o,j)=>`<li><button class="opt" data-q="${i}" data-o="${j}">${o}</button></li>`).join('')}</ul>
+      <div class="fb" id="fb${i}"></div>
+    </div>`).join('');
+  host.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',onAnswer));
+}
+function onAnswer(e){
+  const qi=+e.target.dataset.q, oi=+e.target.dataset.o, q=quiz[qi];
+  const block=document.querySelector('.q[data-i="'+qi+'"]');
+  if(block.dataset.done) return;
+  block.dataset.done="1"; answered++;
+  const fb=document.getElementById('fb'+qi);
+  if(oi===q.a){ e.target.classList.add('correct'); correct++; fb.className='fb ok show'; fb.textContent='Correct. '+q.fb; }
+  else{ e.target.classList.add('wrong'); fb.className='fb no show'; fb.textContent='Not quite. '+q.fb;
+        block.querySelector('.opt[data-o="'+q.a+'"]').classList.add('correct'); }
+  updateNav();
+}
+function show(n){
+  cur=n;
+  document.getElementById('card').innerHTML = screens[n];
+  if(n===3) renderQuiz();
+  if(n===4){ document.getElementById('scorebox').innerHTML =
+      '<div class="score">'+correct+' / '+quiz.length+'</div><p>knowledge-check score</p>'; }
+  document.getElementById('prog').style.width = ((n)/(screens.length-1)*100)+'%';
+  document.getElementById('pmeta').textContent='Screen '+(n+1)+' of '+screens.length;
+  window.scrollTo(0,0);
+  renderNav();
+}
+function renderNav(){
+  const card=document.getElementById('card');
+  const nav=document.createElement('div'); nav.className='nav';
+  const back=document.createElement('button'); back.className='back'; back.textContent='Back';
+  back.disabled = cur===0; back.onclick=()=>show(cur-1);
+  const next=document.createElement('button'); next.className='next';
+  next.textContent = cur===screens.length-1 ? 'Finish' : 'Next';
+  next.onclick=()=>{ if(cur<screens.length-1) show(cur+1); };
+  nav.appendChild(back); nav.appendChild(next); card.appendChild(nav);
+  updateNav();
+}
+function updateNav(){
+  if(cur===3){ const next=document.querySelector('.next'); if(next) next.disabled = answered<quiz.length; }
+}
+show(0);
+</script>
+</body>
+</html>
